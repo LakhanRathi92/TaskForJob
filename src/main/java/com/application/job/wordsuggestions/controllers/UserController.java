@@ -1,6 +1,9 @@
 package com.application.job.wordsuggestions.controllers;
 
+import com.application.job.wordsuggestions.ExceptionHandles.UserNotFoundException;
 import com.application.job.wordsuggestions.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,8 @@ import java.util.List;
 @RestController
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private IUserService userService;
 
@@ -24,9 +29,9 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id){
-        User user = userService.getUserById(id);
-        return new ResponseEntity<User>(user,HttpStatus.OK);
+    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) throws UserNotFoundException {
+         User user = userService.getUserById(id);
+         return new ResponseEntity<User>(user,HttpStatus.OK);
     }
 
     @PostMapping("user/")
@@ -47,8 +52,9 @@ public class UserController {
     }
 
     @DeleteMapping("user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer id) throws UserNotFoundException {
         userService.deleteUser(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
+
 }

@@ -4,7 +4,7 @@ import com.application.job.wordsuggestions.models.User;
 import com.application.job.wordsuggestions.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.application.job.wordsuggestions.ExceptionHandles.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +21,14 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User getUserById(long userId) {
-        User res = userRepository.findById(userId).get();
+    public User getUserById(long userId) throws UserNotFoundException{
+        User res;
+        try {
+            res = userRepository.findById(userId).get();
+        }
+        catch(Exception ex) {
+            throw new UserNotFoundException();
+        }
         return res;
     }
 
@@ -32,7 +38,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(int userId) throws UserNotFoundException {
         userRepository.delete(getUserById(userId));
     }
 
