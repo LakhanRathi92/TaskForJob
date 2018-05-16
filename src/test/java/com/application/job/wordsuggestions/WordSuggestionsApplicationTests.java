@@ -103,8 +103,4 @@ public class WordSuggestionsApplicationTests {
         System.out.println(allUsers);
     }
 
-    @Test
-    public void testAlgorithm(){
-
-    }
 }
